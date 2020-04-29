@@ -18,7 +18,7 @@ import {StyleSheet, Text, View } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 
-Geocoder.init("AIzaSyAJU50M2An0n4PhdD24dbP_0kDruSLLPdU");
+Geocoder.init("AIzaSyDx0JW2zGiQpReOhudnms8xpnVg_WLrY6I");
 
 
 
@@ -98,8 +98,8 @@ export default class App extends React.Component {
             latitude: 42.350970,
             longitude: -71.110810,
           }}
-          title={"Title"}
-          description={'Marker'}
+          title={"Covid-19"}
+          //description={''}
           draggable
           onDragEnd={
             (e) => {

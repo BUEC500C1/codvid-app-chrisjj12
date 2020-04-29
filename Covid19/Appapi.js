@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Text, View, StatusBar } from 'react-native';
 
-export default class App extends React.Component {
+export default class Appapi extends React.Component {
   state = {
     "Country": "",
     "CountryCode": "",
