@@ -18,7 +18,7 @@ import {StyleSheet, Text, View } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 
-Geocoder.init("");
+Geocoder.init("AIzaSyDSpi2YP6vmCM923GQksTGjnft6GIqifxs");
 
 
 
