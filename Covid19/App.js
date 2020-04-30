@@ -26,19 +26,16 @@ export default class App extends React.Component {
   
   constructor(){
     super();
-    state = {
-      //Country_Data: {
-        Country: "",
-        //CountryCode: "",
-        //Slug: "",
-        NewConfirmed: "",
-        TotalConfirmed: "",
-        NewDeaths: "",
-        TotalDeaths: "",
-        NewRecovered: "",
-        TotalRecovered: "",
-        Date: "",
-      //},
+    this.state = {
+      Country: "",
+      CountryCode: "",
+      NewConfirmed: "",
+      TotalConfirmed: "",
+      NewDeaths: "",
+      TotalDeaths: "",
+      NewRecovered: "",
+      TotalRecovered: "",
+      Date: "",
       Globaldata: {
         NewConfirmed: "",
         TotalConfirmed: "",
@@ -47,8 +44,12 @@ export default class App extends React.Component {
         NewRecovered: "",
         TotalRecovered: "",
         Date: ""
+      },
+      marker: {
       }
     };
+    this.movemarker = this.movemarker.bind(this);
+    this.getdata = this.getdata.bind(this);
   }
   showdata() {
 
@@ -69,16 +70,25 @@ export default class App extends React.Component {
 
   ////var pullcountry;
   movemarker(e) {
-    var latitude = e.nativeEvent.coordinate.latitude;
-    var longitude = e.nativeEvent.coordinate.longitude;
-    Geocoder.from(latitude, longitude)
+    var coordinate = e.nativeEvent.coordinate;
+    
+    this.setState({
+      marker: {
+        coordinate: e.nativeEvent.coordinate,
+        key: 0
+      }
+    });
+
+    Geocoder.from(coordinate)
 		  .then(json => {
         var i;
         for (i = 0; i < json.results[0].address_components.length; i++) {
           if (json.results[0].address_components[i].types[0] == "country"){
+            var pullcountrycode = json.results[0].address_components[i].short_name;
             var pullcountry = json.results[0].address_components[i].long_name;
-            //console.log(addressComponent)
+            console.log(pullcountry);
             this.setState({
+              CountryCode: pullcountrycode,
               Country: pullcountry
             }, () => this.getdata());
           }
@@ -88,22 +98,26 @@ export default class App extends React.Component {
       
   }
   getdata() {
-    fetch('https://api.covid19api.com/countries', {
+    fetch('https://api.covid19api.com/summary', {
       method: 'GET',
     })
       .then(response => response.json())
       .then(json => {
-        this.setState ({
-          data: {
-            NewConfirmed: json["NewConfirmed"],
-            TotalConfirmed: json["TotalConfirmed"],
-            NewDeaths: json["NewDeaths"],
-            TotalDeaths: json["TotalDeath"],
-            NewRecovered: json["NewRecovered"],
-            TotalRecovered: json["TotalRecovered"],
-            Date: json["Date"],
+        var i;
+        for (i = 0; i < json["Countries"].length; i++) {
+          if (json["Countries"][i]["CountryCode"] == this.state.CountryCode) {
+            console.log("MATCH")
+            this.setState ({
+              NewConfirmed: json["Countries"][i]["NewConfirmed"],
+              TotalConfirmed: json["Countries"][i]["TotalConfirmed"],
+              NewDeaths: json["Countries"][i]["NewDeaths"],
+              TotalDeaths: json["Countries"][i]["TotalDeaths"],
+              NewRecovered: json["Countries"][i]["NewRecovered"],
+              TotalRecovered: json["Countries"][i]["TotalRecovered"],
+              Date: json["Countries"][i]["Date"],
+            })
           }
-        }).then();
+        }
       })
       .catch(error => {
         console.error(error);
@@ -120,54 +134,57 @@ export default class App extends React.Component {
           longitude: -71.110810,
           latitudeDelta: 60,
           longitudeDelta: 60}}
-          onPress = {
-            (e) => {
-              this.movemarker(e);
-            }
-          }
+          onPress = {this.movemarker}
       >
         <Marker
-          /*
-          //coordinate={{
-            latitude: 42.350970,
-            longitude: -71.110810,
-          }}
+          coordinate={this.state.marker.coordinate}
+          key={0}
           title={"Covid-19"}
-          draggable
-          onDragEnd = {
-            (e) => {
-              this.movemarker(e);
-            }
-          }
-          */
+          description={this.state.Country}
         >
           <View style={{backgroundColor: "red", padding: 10}}>
-            <Text>
-              NewConfirmed: this.getdata.data.NewConfirmed
-            </Text>
-            <Text >
-              TotalConfirmed: {this.getdata.data.TotalConfirmed}
-            </Text>
-            <Text >
-              NewDeaths: {this.getdata.data.NewDeaths}
-            </Text>
-            <Text >
-              TotalDeaths: {this.getdata.data.TotalDeaths}
-            </Text>
-            <Text >
-              NewRecovered: {this.getdata.data.NewRecovered}
+            <Text style={{fontSize: 32}}>
+              {this.state.Country}
             </Text>
             <Text>
-              TotalRecovered: {this.getdata.data.TotalRecovered}
+              NewConfirmed: {this.state.NewConfirmed}
             </Text>
             <Text >
-              Date: {this.getdata.data.recovered}
+              TotalConfirmed: {this.state.TotalConfirmed}
             </Text>
-          </View>
-        </Marker>       
-        />
+            <Text >
+              NewDeaths: {this.state.NewDeaths}
+            </Text>
+            <Text >
+              TotalDeaths: {this.state.TotalDeaths}
+            </Text>
+            <Text >
+              NewRecovered: {this.state.NewRecovered}
+            </Text>
+            <Text>
+              TotalRecovered: {this.state.TotalRecovered}
+            </Text>
+            <Text >
+              Date: {this.state.Date}
+            </Text>
+          </View>  
+        </Marker>
       </MapView> 
+      
     </View> 
     );
   }
 }
+
+/*
+<Marker
+            coordinate={marker.coordinate}
+            key={marker.key}
+            title={"Covid-19"}
+            description={this.state.Country}
+          >
+  {this.state.markers.map((marker) => {
+
+
+  }
+</Marker> */
