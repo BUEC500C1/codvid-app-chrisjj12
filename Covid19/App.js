@@ -27,28 +27,31 @@ export default class App extends React.Component {
   constructor(){
     super();
     state = {
-      Country_Data: {
+      //Country_Data: {
         Country: "",
-        CountryCode: "",
-        Slug: "",
+        //CountryCode: "",
+        //Slug: "",
         NewConfirmed: "",
         TotalConfirmed: "",
         NewDeaths: "",
-        TotalDeath: "",
+        TotalDeaths: "",
         NewRecovered: "",
         TotalRecovered: "",
-        Date: ""
-      },
+        Date: "",
+      //},
       Globaldata: {
         NewConfirmed: "",
         TotalConfirmed: "",
         NewDeaths: "",
-        TotalDeath: "",
+        TotalDeaths: "",
         NewRecovered: "",
         TotalRecovered: "",
         Date: ""
       }
     };
+  }
+  showdata() {
+
   }
 
   componentDidMount() {
@@ -58,28 +61,55 @@ export default class App extends React.Component {
       .then(response => response.json())
       .then(json => {
         console.log(json['Global']['NewConfirmed'])
-    
       })
       .catch(error => {
         console.error(error);
       });
   }
-  handlepress(e) {
-    console.log(e.nativeEvent.coordinate)
-    //instead of console.log, learn how to use google geocoder in react native and will give you the country if you parse it right
+
+  ////var pullcountry;
+  movemarker(e) {
+    var latitude = e.nativeEvent.coordinate.latitude;
+    var longitude = e.nativeEvent.coordinate.longitude;
+    Geocoder.from(latitude, longitude)
+		  .then(json => {
+        var i;
+        for (i = 0; i < json.results[0].address_components.length; i++) {
+          if (json.results[0].address_components[i].types[0] == "country"){
+            var pullcountry = json.results[0].address_components[i].long_name;
+            //console.log(addressComponent)
+            this.setState({
+              Country: pullcountry
+            }, () => this.getdata());
+          }
+        }
+		  })
+      .catch(error => console.warn(error));
+      
   }
-  onRegionChange(e) {
-    console.log(e.nativeEvent.coordinate.latitude)
-    console.log(e.nativeEvent.coordinate.longitude)
-    //this.setState(latitude: e.nativeEvent.coordinate.longitude)
-    Geocoder.from({
-      latitude : e.nativeEvent.coordinate.latitude,
-      longitude : e.nativeEvent.coordinate.longitude,
-    });
+  getdata() {
+    fetch('https://api.covid19api.com/countries', {
+      method: 'GET',
+    })
+      .then(response => response.json())
+      .then(json => {
+        this.setState ({
+          data: {
+            NewConfirmed: json["NewConfirmed"],
+            TotalConfirmed: json["TotalConfirmed"],
+            NewDeaths: json["NewDeaths"],
+            TotalDeaths: json["TotalDeath"],
+            NewRecovered: json["NewRecovered"],
+            TotalRecovered: json["TotalRecovered"],
+            Date: json["Date"],
+          }
+        }).then();
+      })
+      .catch(error => {
+        console.error(error);
+      });
   }
   render() {
-
-
     return (
       <View style={{ paddingTop: 30, flex: 1 }}>
       <MapView
@@ -88,32 +118,56 @@ export default class App extends React.Component {
         initialRegion={{
           latitude: 42.350970,
           longitude: -71.110810,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421}}
-        onPress = {this.handlepress}
+          latitudeDelta: 60,
+          longitudeDelta: 60}}
+          onPress = {
+            (e) => {
+              this.movemarker(e);
+            }
+          }
       >
-
         <Marker
-          coordinate={{
+          /*
+          //coordinate={{
             latitude: 42.350970,
             longitude: -71.110810,
           }}
           title={"Covid-19"}
-          //description={''}
           draggable
-          onDragEnd={
+          onDragEnd = {
             (e) => {
-              this.onRegionChange(e);
+              this.movemarker(e);
             }
           }
+          */
+        >
+          <View style={{backgroundColor: "red", padding: 10}}>
+            <Text>
+              NewConfirmed: this.getdata.data.NewConfirmed
+            </Text>
+            <Text >
+              TotalConfirmed: {this.getdata.data.TotalConfirmed}
+            </Text>
+            <Text >
+              NewDeaths: {this.getdata.data.NewDeaths}
+            </Text>
+            <Text >
+              TotalDeaths: {this.getdata.data.TotalDeaths}
+            </Text>
+            <Text >
+              NewRecovered: {this.getdata.data.NewRecovered}
+            </Text>
+            <Text>
+              TotalRecovered: {this.getdata.data.TotalRecovered}
+            </Text>
+            <Text >
+              Date: {this.getdata.data.recovered}
+            </Text>
+          </View>
+        </Marker>       
         />
-
       </MapView> 
-
-      
-    
     </View> 
     );
   }
 }
-
