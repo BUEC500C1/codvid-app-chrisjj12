@@ -51,24 +51,7 @@ export default class App extends React.Component {
     this.movemarker = this.movemarker.bind(this);
     this.getdata = this.getdata.bind(this);
   }
-  showdata() {
-
-  }
-
-  componentDidMount() {
-    fetch('https://api.covid19api.com/summary', {
-      method: 'GET',
-    })
-      .then(response => response.json())
-      .then(json => {
-        console.log(json['Global']['NewConfirmed'])
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  }
-
-  ////var pullcountry;
+  
   movemarker(e) {
     var coordinate = e.nativeEvent.coordinate;
     
@@ -86,7 +69,6 @@ export default class App extends React.Component {
           if (json.results[0].address_components[i].types[0] == "country"){
             var pullcountrycode = json.results[0].address_components[i].short_name;
             var pullcountry = json.results[0].address_components[i].long_name;
-            console.log(pullcountry);
             this.setState({
               CountryCode: pullcountrycode,
               Country: pullcountry
@@ -94,9 +76,9 @@ export default class App extends React.Component {
           }
         }
 		  })
-      .catch(error => console.warn(error));
-      
+      .catch(error => console.warn(error)); 
   }
+
   getdata() {
     fetch('https://api.covid19api.com/summary', {
       method: 'GET',
@@ -106,7 +88,6 @@ export default class App extends React.Component {
         var i;
         for (i = 0; i < json["Countries"].length; i++) {
           if (json["Countries"][i]["CountryCode"] == this.state.CountryCode) {
-            console.log("MATCH")
             this.setState ({
               NewConfirmed: json["Countries"][i]["NewConfirmed"],
               TotalConfirmed: json["Countries"][i]["TotalConfirmed"],
@@ -114,7 +95,7 @@ export default class App extends React.Component {
               TotalDeaths: json["Countries"][i]["TotalDeaths"],
               NewRecovered: json["Countries"][i]["NewRecovered"],
               TotalRecovered: json["Countries"][i]["TotalRecovered"],
-              Date: json["Countries"][i]["Date"],
+              Date: json["Countries"][i]["Date"]
             })
           }
         }
@@ -123,6 +104,7 @@ export default class App extends React.Component {
         console.error(error);
       });
   }
+
   render() {
     return (
       <View style={{ paddingTop: 30, flex: 1 }}>
@@ -170,21 +152,7 @@ export default class App extends React.Component {
           </View>  
         </Marker>
       </MapView> 
-      
     </View> 
     );
   }
 }
-
-/*
-<Marker
-            coordinate={marker.coordinate}
-            key={marker.key}
-            title={"Covid-19"}
-            description={this.state.Country}
-          >
-  {this.state.markers.map((marker) => {
-
-
-  }
-</Marker> */
