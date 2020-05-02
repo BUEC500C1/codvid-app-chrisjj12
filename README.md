@@ -1,4 +1,4 @@
-#COVID-19 APP
+# COVID-19 APP
 For this app, when you press on a country, it will show the data of "NewConfirmed, TotalConfirmed, 
 NewDeaths, TotalDeaths, NewRecovered, TotalRecovered, and Date" for each country. Using reac-native, this a 
 multi-platform app and is receive the current covid-19 data from the covid19 api. I used geocoder so that
