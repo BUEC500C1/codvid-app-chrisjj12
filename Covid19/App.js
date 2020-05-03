@@ -17,23 +17,24 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, {Component} from 'react';
-import {StyleSheet, Text, View } from 'react-native';
+import {StyleSheet, Text, View, ImageBackground} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 
-
-
 Geocoder.init("AIzaSyDSpi2YP6vmCM923GQksTGjnft6GIqifxs");
+
+const covid19image = {uri: "https://seiuhcilin.org/wp-content/uploads/2020/03/Coronavirus-COVID-19.jpg"}
 
 function homepage() {
   return(
-    <View style={{flex:1,justifyContent: "center",alignItems: "center"}}>
-      <Text style={{textAlignVertical: "center", textAlign: "center", fontSize: 32}}>
-        Welcome to COVID-19 World Map App {'\n'}
-      </Text>
-      <Text style={{textAlignVertical: "center",textAlign: "center", fontSize: 24}}>
-        Tap on any country and the latest data will show on your screen
-      </Text>
+    <View style={{justifyContent: "center", alignItems: "center"}}>
+      <ImageBackground source = {covid19image} style = {{width: '100%', height: '100%'}}>
+        <View style={{flex: .3,justifyContent: "center", alignItems: "center"}}>
+          <Text style={{textAlignVertical: "top", textAlign: "center", fontSize: 44, color: 'white'}}>
+            COVID-19 World Map 
+          </Text>
+        </View>
+      </ImageBackground>
     </View>
   );
 }
@@ -145,48 +146,35 @@ class Covid19_data extends React.Component {
       <View style={{ paddingTop: 30, flex: 1 }}>
       <MapView
         style={{ flex: 1 }}
-        showsUserLocation
-        initialRegion={{
-          latitude: 42.350970,
-          longitude: -71.110810,
-          latitudeDelta: 60,
-          longitudeDelta: 60}}
-          onPress = {this.movemarker}
+        onPress = {this.movemarker}
       >
-        <Marker
-          coordinate={this.state.marker.coordinate}
-          key={0}
-          title={"Covid-19"}
-          description={this.state.Country}
-        >
-          <View style={{backgroundColor: "red", padding: 10}}>
-            <Text style={{fontSize: 32}}>
-              {this.state.Country}
-            </Text>
-            <Text>
-              NewConfirmed: {this.state.NewConfirmed}
-            </Text>
-            <Text >
-              TotalConfirmed: {this.state.TotalConfirmed}
-            </Text>
-            <Text >
-              NewDeaths: {this.state.NewDeaths}
-            </Text>
-            <Text >
-              TotalDeaths: {this.state.TotalDeaths}
-            </Text>
-            <Text >
-              NewRecovered: {this.state.NewRecovered}
-            </Text>
-            <Text>
-              TotalRecovered: {this.state.TotalRecovered}
-            </Text>
-            <Text >
-              Date: {this.state.Date}
-            </Text>
-          </View>  
-        </Marker>
       </MapView> 
+      <View style={{flex: .3, backgroundColor: "darksalmon", padding: 10}}>
+        <Text style={{fontSize: 32}}>
+          {this.state.Country}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          NewConfirmed: {this.state.NewConfirmed}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          TotalConfirmed: {this.state.TotalConfirmed}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          NewDeaths: {this.state.NewDeaths}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          TotalDeaths: {this.state.TotalDeaths}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          NewRecovered: {this.state.NewRecovered}
+        </Text>
+        <Text style = {{fontSize: 16}}>
+          TotalRecovered: {this.state.TotalRecovered}
+        </Text >
+        <Text style = {{fontSize: 16}}>
+          Date: {this.state.Date}
+        </Text>
+    </View> 
     </View> 
     );
   }
