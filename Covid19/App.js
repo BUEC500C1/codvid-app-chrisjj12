@@ -13,16 +13,51 @@ import { StyleSheet, Text, View , TextInput} from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 */
 
-import React from 'react';
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import React, {Component} from 'react';
 import {StyleSheet, Text, View } from 'react-native';
 import MapView, {Marker} from 'react-native-maps';
 import Geocoder from 'react-native-geocoding';
 
+
+
 Geocoder.init("AIzaSyDSpi2YP6vmCM923GQksTGjnft6GIqifxs");
 
+function homepage() {
+  return(
+    <View style={{flex:1,justifyContent: "center",alignItems: "center"}}>
+      <Text style={{textAlignVertical: "center", textAlign: "center", fontSize: 32}}>
+        Welcome to COVID-19 World Map App {'\n'}
+      </Text>
+      <Text style={{textAlignVertical: "center",textAlign: "center", fontSize: 24}}>
+        Tap on any country and the latest data will show on your screen
+      </Text>
+    </View>
+  );
+}
+const Tab = createBottomTabNavigator();
+
+export default class App extends Component {
+
+  render(){
+    return(
+      <NavigationContainer>
+        <Tab.Navigator initialRouteName = "Home">
+          <Tab.Screen name = "Home" component = {homepage}/>
+          <Tab.Screen name = "Map" component = {Covid19_data}/>
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+
+  }
+}
 
 
-export default class App extends React.Component {
+
+
+class Covid19_data extends React.Component {
   
   constructor(){
     super();
