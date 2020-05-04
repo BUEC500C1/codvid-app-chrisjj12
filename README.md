@@ -3,4 +3,6 @@ For this app, there is are two pages that you can move back and forth with the b
 
 ![](iOS_COVID19_iPhone_Homepage.png)
 ![](iOS_COVID19_iPhone_Map.png)
+![](iOS_COVID19_Emulator_Homepage.png)
+![](iOS_COVID19_Emulator_Map.png)
 
