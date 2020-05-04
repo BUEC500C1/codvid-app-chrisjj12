@@ -162,3 +162,40 @@ class Covid19_data extends React.Component {
     );
   }
 }
+
+//Marker code
+/*
+<Marker
+          coordinate={this.state.marker.coordinate}
+          key={0}
+          title={"Covid-19"}
+          description={this.state.Country}
+        >
+          <View style={{backgroundColor: "red", padding: 10}}>
+            <Text style={{fontSize: 32}}>
+              {this.state.Country}
+            </Text>
+            <Text>
+              NewConfirmed: {this.state.NewConfirmed}
+            </Text>
+            <Text >
+              TotalConfirmed: {this.state.TotalConfirmed}
+            </Text>
+            <Text >
+              NewDeaths: {this.state.NewDeaths}
+            </Text>
+            <Text >
+              TotalDeaths: {this.state.TotalDeaths}
+            </Text>
+            <Text >
+              NewRecovered: {this.state.NewRecovered}
+            </Text>
+            <Text>
+              TotalRecovered: {this.state.TotalRecovered}
+            </Text>
+            <Text >
+              Date: {this.state.Date}
+            </Text>
+          </View>  
+        </Marker>
+        */
